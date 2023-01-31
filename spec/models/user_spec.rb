@@ -55,10 +55,42 @@ RSpec.describe User, type: :model do
 
 
 
-    describe '.authenticate_with_credentials' do
-    # examples for this class method here
-  end
+    describe '.authenticate_with_credentials' do\
+      before(:each) do
+        @user = User.create(
+          first_name: "Wes",
+          last_name: "Mat",
+          email: "test@test.com",
+          password: "123456789"
+          password_confirmation: "123456789"
+        )
+      end
 
+      it "should be valid if email and user is not nil" do
+        user = User.authenticate_with_credentials("test@test.com", "123456789")
+        expect(user).not_to eq(nil)
+      end
+      
+      it "should not be valid if email and user is nil" do
+        user = User.authenticate_with_credentials("nil", "123456789")
+        expect(user).to eq(nil)
+      end
+      
+      it "should not be valid if email and user is nil" do
+        user = User.authenticate_with_credentials("test@test.com", "nil")
+        expect(user).to eq(nil)
+      end
+
+      it "should be valid if email contains empty spaces" do
+      user = User.authenticate_with_credentials("   test@test.com   ", "123456789")
+      expect(user).not_to eq(nil)
+     end
+
+     it "should be valid if email contains random capitals" do
+      user = User.authenticate_with_credentials("tEst@teSt.com", "123456789")
+      expect(user).not_to eq(nil)
+     end
+  end
 end
 
    
